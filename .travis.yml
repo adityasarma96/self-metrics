@@ -2,7 +2,3 @@ language: java
 jdk: openjdk11
 after_success:
   - bash <(curl -s https://codecov.io/bash)
-
-env:
-  global:
-    - CODECOV_TOKEN=:bb39ad7e-8f99-46b0-b925-2ef0d5391459
