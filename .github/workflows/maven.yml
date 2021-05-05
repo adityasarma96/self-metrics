@@ -8,6 +8,13 @@ on:
     branches: [ main ]
   pull_request:
     branches: [ main ]
+env:
+  AWS_REGION: ap-south-1
+  ECR_REPOSITORY: self-metrics
+  ECS_SERVICE: self-metrics-service
+  ECS_CLUSTER: self-metrics-cluster
+  ECS_TASK_DEFINITION: self-metrics-task-definition
+  CONTAINER_NAME: self-metrics
 
 jobs:
   build:
@@ -28,7 +35,7 @@ jobs:
       with:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: ap-south-1
+        aws-region: ${{ env.AWS_REGION }}
 
     - name: Login to Amazon ECR
       id: login-ecr
@@ -46,3 +53,19 @@ jobs:
 
     - name: Download task definition
       run: aws ecs describe-task-definition --task-definition  self-metrics-task-definition --query taskDefinition > task-definition.json
+
+    - name: Fill in the new image ID in the Amazon ECS task definition
+      id: task-def
+      uses: aws-actions/amazon-ecs-render-task-definition@v1
+      with:
+        task-definition: task-definition.json
+        container-name: ${{ env.CONTAINER_NAME }}
+        image: ${{ steps.build-image.outputs.image }}
+
+  - name: Deploy Amazon ECS task definition
+    uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+    with:
+      task-definition: ${{ steps.task-def.outputs.task-definition }}
+      service: ${{ env.ECS_SERVICE }}
+      cluster: ${{ env.ECS_CLUSTER }}
+      wait-for-service-stability: true
