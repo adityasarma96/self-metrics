@@ -41,8 +41,7 @@ jobs:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         IMAGE_TAG: ${{ github.sha }}
       run: |
-        docker build -t self-metrics .
-        docker tag self-metrics:latest public.ecr.aws/p7g2s4y5/self-metrics:latest
-        docker push public.ecr.aws/p7g2s4y5/self-metrics:latest
-        echo "::set-output name=image::public.ecr.aws/p7g2s4y5/self-metrics:latest"
+        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+        echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
 
