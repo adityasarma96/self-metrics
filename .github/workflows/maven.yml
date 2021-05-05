@@ -10,10 +10,8 @@ on:
     branches: [ main ]
 
 jobs:
-  build:
-
+  something:
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v2
     - name: Set up JDK 11
@@ -24,3 +22,4 @@ jobs:
       run: mvn -B package --file pom.xml
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v1
+
