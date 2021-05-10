@@ -24,6 +24,7 @@ public class UserService {
     DynamoDbEnhancedClient dynamoDbEnhancedClient;
 
     public User getUserByUserName(final String userName){
+        log.info("Getting user details for {}",userName);
         DynamoDbTable<User> userTable = dynamoDbEnhancedClient.table(userTableName, TableSchema.fromBean(User.class));
         final User user = userTable.getItem(Key.builder().partitionValue(userName).build());
         log.info("User Returned: {}",user);

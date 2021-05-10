@@ -17,15 +17,14 @@ import java.net.URI;
 @Configuration
 public class AwsClientConfig {
 
-    @Value("${amazon.dynamodb.endpoint}")
+    @Value("${aws.dynamodb.endpoint}")
     private String dynamoDbEndpoint;
-    @Value("${amazon.aws.accesskey}")
+    @Value("${aws.accesskey}")
     private String accessKey;
-    @Value("${amazon.aws.secretkey}")
+    @Value("${aws.secretkey}")
     private String secretKey;
-    @Value("${amazon.aws.region}")
+    @Value("${aws.region}")
     private String region;
-
 
     private AwsCredentials credentials;
 
@@ -44,19 +43,4 @@ public class AwsClientConfig {
         return DynamoDbEnhancedClient.builder().dynamoDbClient(client).build();
 
     }
-
-    /*@Bean
-    public AWSCredentialsProvider awsCredentials(){
-        return new AWSStaticCredentialsProvider(new BasicAWSCredentials(accessKey,secretKey));
-    }
-
-    @Bean
-    public DynamoDBMapper dynamoDBMapper(){
-        AmazonDynamoDB client = AmazonDynamoDBClientBuilder.standard()
-                .withCredentials(awsCredentials())
-                .withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration(amazonDynamoDBEndpoint,region))
-                .build();
-
-        return new DynamoDBMapper(client, DynamoDBMapperConfig.DEFAULT);
-    }*/
 }
