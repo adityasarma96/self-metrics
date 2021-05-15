@@ -28,7 +28,7 @@ public class UserController {
         return userService.getAllUsers();
     }
 
-    @GetMapping("/")
+    @GetMapping("/hello")
     public String hello() {
         return "Hello There!";
     }
